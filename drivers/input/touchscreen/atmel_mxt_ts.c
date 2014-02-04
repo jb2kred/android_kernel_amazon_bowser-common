@@ -490,7 +490,6 @@ static ssize_t dt2w_enabled_show(struct device *dev,
  
  	if (!mutex_trylock(&pwrdev->mutex))
  		return;
- //	latona_leds_report_event(KEY_POWER, 1);
  	input_event(pwrdev, EV_KEY, KEY_POWER, 1);
  	input_event(pwrdev, EV_SYN, 0, 0);
  	msleep(30);
@@ -2868,9 +2867,6 @@ if(dt2w_switch ==1)
 {
 data->dt2w.suspended = 1;
  	if (data->dt2w.enabled) {
- 	//	mxt_release_all(data);
- 	//	latona_leds_report_event(KEY_POWER, 0);
- 
  		/* Disable touchkeys */
  		mxt_write_object(data, MXT_TOUCH_KEYARRAY_T15,
  				MXT_TOUCH_CTRL, 0);
