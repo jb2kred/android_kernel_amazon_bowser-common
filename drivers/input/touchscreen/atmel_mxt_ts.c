@@ -274,13 +274,9 @@
 #define MXT_MAX_FINGER		10
 
 static int wake_switch = 0;
-//static int s2w_switch = 0;
 
 module_param(wake_switch, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-MODULE_PARM_DESC(wake_switch, "dt2w integer");
-
-//module_param(s2w_switch, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-//MODULE_PARM_DESC(s2w_switch, "s2w integer");
+MODULE_PARM_DESC(wake_switch, "wake integer");
 
 #define DT2W_ENABLED 1
 #define DT2W_TIMEOUT_MAX 400
@@ -627,36 +623,28 @@ static void s2w_detect(struct mxt_data *data,u8 *message,int id)
 				//y = y >> 2;
 
 				// left 2 right check start point
-				if (x < 30 && y > 625 && y < 655)
+				if (x < 140 && y > 140 && y < 1140)
 				{
 					data->s2w.started = true;
 					data->s2w.start = 0; // l2r int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 				// right 2 left check start point
-				if (x > 770 && y > 625 && y < 655)
+				if (x > 660 && y > 140 && y < 1140)
 				{
 					data->s2w.started = true;
 					data->s2w.start = 1; // r2l int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 				// top 2 bottom check start point
-				if (y < 30 && x > 385 && x < 415)
+				if (y < 140 && x > 140 && x < 660)
 				{
 					data->s2w.started = true;
 					data->s2w.start = 2; // t2b int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 				// bottom 2 top check start point
-				if (y > 1250 && x > 385 && x < 415)
+				if (y > 1140 && x > 140 && x < 660)
 				{
 					data->s2w.started = true;
 					data->s2w.start = 3; // b2t int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 				return;
 	}
@@ -667,6 +655,7 @@ static void s2w_detect(struct mxt_data *data,u8 *message,int id)
 		if (s2w_id != id) {
 			s2w_id = id;
 			s2w_time = 0;
+			data->s2w.started == false;
 			return;
 		}
 
@@ -683,36 +672,29 @@ static void s2w_detect(struct mxt_data *data,u8 *message,int id)
 				//y = y >> 2;
 
 				// left 2 right check end point
-				if (x > 770 && y > 625 && y < 655)
+				if (x > 660 && y > 140 && y < 1140)
 				{
 					data->s2w.end = 0; // l2r int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 				// right 2 left check end point
-				if (x < 30 && y > 625 && y < 655)
+				if (x < 140 && y > 140 && y < 1140)
 				{
 					data->s2w.end = 1; // r2l int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 				// top 2 bottom check end point
-				if (y > 1250 && x > 385 && x < 415)
+				if (y > 1140 && x > 140 && x < 660)
 				{
 					data->s2w.end = 2; // t2b int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 				// bottom 2 top check end point
-				if (y < 30 && x > 385 && x < 415)
+				if (y < 140 && x > 140 && x < 660)
 				{
 					data->s2w.end = 3; // b2t int
-					printk(KERN_INFO "x: %d\n",x);
-					printk(KERN_INFO "y: %d\n",y);
 				}
 
 				if(data->s2w.start == data->s2w.end)
 				{
+					data->s2w.started == false;
 					schedule_work(&data->s2w.work);
 				}
 				else
