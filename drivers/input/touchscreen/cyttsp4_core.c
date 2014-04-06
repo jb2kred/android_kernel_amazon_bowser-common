@@ -2392,15 +2392,15 @@ static int _cyttsp4_xy_worker(struct cyttsp4 *ts)
 		retval = 0;
 		goto _cyttsp4_xy_worker_exit;
 
-+// HASH: Removing this check due to missed 2nd-touch events.  Needs research.
- +#if 0
+// HASH: Removing this check due to missed 2nd-touch events.  Needs research.
+#if 0
 	} else if (cur_record_count == ts->prev_record_count) {
 		dev_vdbg(ts->dev,
 			"%s: Duplicate record count=%02X; ignore\n",
 			__func__, cur_record_count);
 		retval = 0;
 		goto _cyttsp4_xy_worker_exit;
-+#endif
+#endif
 	} else if (IS_BOOTLOADERMODE(rep_stat)) {
 		dev_info(ts->dev,
 			"%s: BL mode found in ACTIVE state\n",
@@ -3893,10 +3893,10 @@ cyttsp4_ic_grpdata_show_opcfg_rderr:
 				__func__, blockid);
 			num_read -= ts->ic_grpoffset;
 			/*
-			 * cmd+rdy_bit, status, ebid, lenh, lenl, reserved,
-			 * data[0] .. data[ndata-6]
-			 * skip data[0] .. data[3] - block size bytes
-			 */
+			 * cmd+rdy_bit, status, ebid, lenh, lenl, reserved,
+			 * data[0] .. data[ndata-6]
+			 * skip data[0] .. data[3] - block size bytes
+			 */
 			memcpy(ic_buf,
 				&pdata[6+4] + ts->ic_grpoffset, num_read);
 			kfree(pdata);
@@ -4369,10 +4369,10 @@ static ssize_t _cyttsp4_ic_grpdata_store(struct device *dev,
 			goto cyttsp4_ic_grpdata_store_tch_wrerr;
 		}
 		/*
-		 * cmd+rdy_bit, status, ebid, lenh, lenl, reserved,
-		 * data[0] .. data[ndata-6]
-		 * skip data[0] .. data[3] - block size bytes
-		 */
+		 * cmd+rdy_bit, status, ebid, lenh, lenl, reserved,
+		 * data[0] .. data[ndata-6]
+		 * skip data[0] .. data[3] - block size bytes
+		 */
 		memcpy(&pdata[6+4+ts->ic_grpoffset], ic_buf, length);
 		_cyttsp4_set_data_block(ts, blockid, &pdata[6+4],
 			mddata_length, mddata_name, true, &mddata_updated);
@@ -4476,7 +4476,7 @@ cyttsp4_ic_grpdata_store_tch_wrerr:
 						dev_err(ts->dev,
 			"%s: timeout waiting"
 						" host_mode=0x%02X"
-						" change  r=%d\n",
+						" change  r=%d\n",
 						__func__, ic_buf[1], retval);
 						/* continue anyway */
 					}
